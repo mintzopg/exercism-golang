@@ -13,10 +13,9 @@ func Score(str string) int {
 	// define map for the scores
 	score := 0
 
-	// for every letter in input string
-	// chars := strings.Split(strings.ToUpper(str), "")
+	// for every rune in input string
 	for _, ch := range str {
-		// look up in every key of the map if it is contained
+		// look up if it is a key of the map and if yes add to score accordingly
 		if _, ok := m[unicode.ToUpper(ch)]; ok == true {
 			score += m[unicode.ToUpper(ch)]
 		}
