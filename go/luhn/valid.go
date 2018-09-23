@@ -1,10 +1,13 @@
 package luhn
 
-import "unicode"
+import (
+	"strings"
+	"unicode"
+)
 
 // Valid function(string)bool
 func Valid(s string) bool {
-	ss := []rune(s)
+	ss := []rune(strings.TrimSpace(s))
 	if len(ss) <= 1 {
 		return false
 	}
@@ -18,13 +21,34 @@ func Valid(s string) bool {
 	}
 
 	// work with valid digits
-	v := ss[:0] // v empty slice with same cap as ss
+	v := make([]int, 0, cap(ss)) // v empty slice of ints with same cap as ss
 	for _, x := range ss {
-		if isValid(x) && (!unicode.IsSpace(x)) {
-			v = append(v, x)
-		} else {
+		if !isValid(x) {
 			return false
+		} else if isValid(x) && (!unicode.IsSpace(x)) {
+			v = append(v, int(x)-'0') // append int; note: all digits will be in range
 		}
+	}
+
+	// implement the algo
+	// step (1) double every second digit
+	for i := len(v) - 2; i >= 0; i -= 2 {
+		if v[i]*2 > 9 {
+			v[i] = v[i]*2 - 9
+		} else {
+			v[i] *= 2
+		}
+	}
+
+	// step (2) summ all digits in v
+	sum := 0
+	for _, x := range v {
+		sum += x
+	}
+
+	// step (3) if sum % 10 == 0 -> valid
+	if !(sum%10 == 0) {
+		return false
 	}
 
 	return true
