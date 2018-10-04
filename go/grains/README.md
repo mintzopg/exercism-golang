@@ -12,6 +12,7 @@ the next. Four on the third, and so on.
 There are 64 squares on a chessboard.
 
 Write code that shows:
+
 - how many grains were on each square, and
 - the total number of grains
 
@@ -48,4 +49,5 @@ you're having trouble, please visit the exercism.io [Go language page](http://ex
 JavaRanch Cattle Drive, exercise 6 [http://www.javaranch.com/grains.jsp](http://www.javaranch.com/grains.jsp)
 
 ## Submitting Incomplete Solutions
+
 It's possible to submit an incomplete solution so you can see how others have completed the exercise.
