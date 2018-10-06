@@ -6,7 +6,7 @@ import (
 
 // Square function(int)(uint64, bool) chessboard grains/square calc
 func Square(sq int) (uint64, error) {
-	// square in grains = 2^n
+	// number of grains in square = 2^n
 	if sq < 1 || sq > 64 {
 		return 0, errors.New("invalid square number")
 	}
