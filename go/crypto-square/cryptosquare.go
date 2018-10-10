@@ -57,14 +57,11 @@ func Encode(txt string) string {
 		r = c - 1
 	}
 
-	chars := []rune(txt)
-	square := make([][]rune, r)
-
-	for i := 0; i < r; i++ {
-		for j := 0; j < c; j++ {
-			if c < len(chars) {
-				square[i][j] = append(square[i], chars[j])
-			}
-		}
+	// pad with spaces at the end if necessary
+	if n != c*r {
+		txt += strings.Repeat(" ", n-c*r)
 	}
+
+	square := make([]string, c)
+
 }
