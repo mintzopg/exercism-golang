@@ -19,6 +19,7 @@ func Normalize(txt string) string {
 	return sb.String()
 }
 
+// find cryptosquare dimensions
 func findDim(n int) (cols int, rows int) {
 	// n number of chars; copy to float64(k) required
 	k := float64(n)
@@ -69,10 +70,10 @@ func Encode(txt string) string {
 		}
 		txt = txt[c:]
 	}
-
+	// construct output string
 	for i := range square {
 		stringOut += strings.Join(square[i], "") + " "
 	}
-
+	
 	return stringOut[:len(stringOut)-1]
 }
