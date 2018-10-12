@@ -47,7 +47,8 @@ func Encode(txt string) string {
 	// normalize the input
 	txt = Normalize(txt)
 	n := len(txt)
-
+	stringOut := ""
+	
 	// check the special cases
 	if n == 0 {
 		return ""
@@ -62,7 +63,6 @@ func Encode(txt string) string {
 		txt += strings.Repeat(" ", c*r-n)
 	}
 
-	stringOut := ""
 	square := make([][]string, c)
 	for j := 0; j < r; j++ {
 		for i := 0; i < c; i++ {
