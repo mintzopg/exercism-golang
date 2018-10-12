@@ -19,19 +19,26 @@ func Normalize(txt string) string {
 	return sb.String()
 }
 
-func findCol(n int) int {
-	// n number of chars
-	c := math.Sqrt(float64(n))
-	n++
+func findDim(n int) (cols int, rows int) {
+	// n number of chars; copy to float64(k) required
+	k := float64(n)
+	var r float64
+	c := math.Sqrt(k)
+	k++
 	for {
 		if c == math.Trunc(c) { // if c is integer return it
 			break
 		} else {
-			n++
-			c = math.Sqrt(float64(n))
+			k++
+			c = math.Sqrt(k)
 		}
 	}
-	return int(c)
+	if c*c == float64(n) {
+		r = c
+	} else {
+		r = c - 1
+	}
+	return int(c), int(r)
 }
 
 // Encode function(normalized string)string
@@ -48,20 +55,24 @@ func Encode(txt string) string {
 		return txt
 	}
 
-	// finc number of rows, columns
-	r := 0
-	c := findCol(n)
-	if c*c == n {
-		r = c
-	} else {
-		r = c - 1
-	}
-
+	c, r := findDim(n)
 	// pad with spaces at the end if necessary
 	if n != c*r {
-		txt += strings.Repeat(" ", n-c*r)
+		txt += strings.Repeat(" ", c*r-n)
 	}
 
-	square := make([]string, c)
+	stringOut := ""
+	square := make([][]string, c)
+	for j := 0; j < r; j++ {
+		for i := 0; i < c; i++ {
+			square[i] = append(square[i], string(txt[i]))
+		}
+		txt = txt[c:]
+	}
 
+	for i := range square {
+		stringOut += strings.Join(square[i], "") + " "
+	}
+
+	return stringOut[:len(stringOut)-1]
 }
