@@ -1,10 +1,13 @@
 package robotname
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
 	"time"
 )
+
+const uniqueNames = 26 * 26 * 10 * 10 * 10
 
 var names = map[string]bool{} // map to hold active robot names
 
@@ -17,6 +20,9 @@ type Robot struct {
 
 // Name generates a valid name for Robot
 func (r *Robot) Name() (string, error) {
+	if len(names) == uniqueNames {
+		return "", errors.New("the number of possible unique names is exhausted")
+	}
 	if r.name != "" { // this comes from use of Name() method in test files
 		return r.name, nil
 	}
