@@ -20,13 +20,12 @@ func (r *Robot) Name() (string, error) {
 	if r.name != "" { // this comes from use of Name() method in test files
 		return r.name, nil
 	}
-	for { // loop will go on until it gets a new valid name
-		r.name = newName()               // (1) get a valid random name
-		if _, ok := names[r.name]; !ok { // (2) check if already given
-			names[r.name] = true // (3) if not add it to cache; the value true or false doesn't matter
-			return r.name, nil   // (4) return the string and nil error
-		}
+	r.name = newName()  // (1) get a valid random name
+	for names[r.name] { // (2) name in cache? true
+		r.name = newName() // (3) repeat with new name
 	}
+	names[r.name] = true // add in cache
+	return r.name, nil
 }
 
 // Reset simply deletes robot name
