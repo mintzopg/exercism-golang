@@ -20,11 +20,11 @@ type Robot struct {
 
 // Name generates a valid name for Robot
 func (r *Robot) Name() (string, error) {
-	if len(names) == uniqueNames {
-		return "", errors.New("the number of possible unique names is exhausted")
-	}
 	if r.name != "" { // this comes from use of Name() method in test files
 		return r.name, nil
+	}
+	if len(names) == uniqueNames {
+		return "", errors.New("the number of possible unique names is exhausted")
 	}
 	r.name = newName()  // (1) get a valid random name
 	for names[r.name] { // (2) name in cache? true
