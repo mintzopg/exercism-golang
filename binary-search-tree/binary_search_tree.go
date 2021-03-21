@@ -17,7 +17,20 @@ func Bst(v int) *SearchTreeData {
 
 // func (*SearchTreeData) Insert(int)
 func (t *SearchTreeData) Insert(v int) {
-	t = insert(t, v)
+	if v <= t.data {
+		if t.left == nil {
+			t.left = Bst(v)
+		} else {
+			t.left.Insert(v)
+		}
+	}
+	if v > t.data {
+		if t.right == nil {
+			t.right = Bst(v)
+		} else {
+			t.right.Insert(v)
+		}
+	}
 }
 
 // func (*SearchTreeData) MapString(func(int) string) []string
@@ -32,21 +45,6 @@ func (t *SearchTreeData) MapInt(f func(int) int) []int {
 	a := []int{}
 	traverseInt(t, f, &a)
 	return a
-}
-
-func insert(t *SearchTreeData, v int) *SearchTreeData {
-	if t == nil {
-		return &SearchTreeData{nil, v, nil}
-	}
-	// All data in the left subtree is less than or equal to the
-	// ... current node's data, and all data in the right subtree is greater than
-	// ... the current node's data.
-	if v <= t.data {
-		t.left = insert(t.left, v)
-		return t
-	}
-	t.right = insert(t.right, v)
-	return t
 }
 
 func traverseString(t *SearchTreeData, f func(int) string, s *[]string) {
