@@ -1,0 +1,163 @@
+package linkedlist
+
+import (
+	"errors"
+	"fmt"
+)
+
+/*
+Doubly Linked List (DLL); [pointer to prev][DATA][pointer to next] ...
+							<------------ Node------------>
+e.g.	[nil][DATA][next] [prev][DATA][next] [prev][DATA][nil]
+		 <---head-----> 				      <----Tail---->
+
+		 ------ front----						---- back----
+*/
+
+// ErrEmptyList -  error definition for operations on empty list
+var ErrEmptyList = errors.New("can't do that on an empty list")
+
+// Node representation
+type Node struct {
+	Val        interface{}
+	prev, next *Node
+}
+
+// List representation
+type List struct {
+	head   *Node
+	length int
+}
+
+// Next returns the next node
+func (n *Node) Next() *Node { // OK
+	return n.next
+}
+
+// Prev returns the previous node
+func (n *Node) Prev() *Node {
+	return n.prev
+}
+
+// First returns the first n in the list
+func (n *Node) First() *Node { // OK
+	for n.prev != nil {
+		n = n.prev
+	}
+	return n
+}
+
+// Last returns the last n in the list
+func (n *Node) Last() *Node { //
+	for n.next != nil {
+		n = n.next
+	}
+	return n
+}
+
+// NewList creates a new doubly linked list preserving the order of values
+func NewList(args ...interface{}) *List { //
+	// first create an empty list
+	l := &List{length: 0}
+	// add all values given if any
+	for _, v := range args {
+		l.PushBack(v)
+	}
+	return l
+}
+
+// Len returns the list length. Helper method
+func (l *List) Len() int { //
+	return l.length
+}
+
+// First returns a pointer to the head of the list
+func (l *List) First() *Node { //
+	return l.head
+}
+
+// Last returns a pointer to the tail of the list
+func (l *List) Last() *Node { //
+	if l.length == 0 {
+		return l.head
+	}
+	p := l.head
+	for p.next != nil {
+		p = p.next
+	}
+	return p
+}
+
+// PushBack inserts a value at the back of the list
+func (l *List) PushBack(v interface{}) { //
+	n := &Node{Val: v}
+	n.prev = l.Last()
+	l.Last().next = n
+	l.length++
+	if l.length == 1 {
+		l.head = n
+		n.prev = nil
+	}
+}
+
+// PopBack removes value at back
+func (l *List) PopBack() (interface{}, error) { //
+	if l.length == 0 {
+		return nil, ErrEmptyList
+	}
+	if l.length == 1 {
+		v := l.head.Val
+		l = NewList() // re-initialize to an empty list
+		return v, nil
+	}
+	v := l.Last().Val
+	l.Last().prev.next = nil
+	l.length--
+	return v, nil
+}
+
+// PushFront inserts value at front
+func (l *List) PushFront(v interface{}) { //
+	n := &Node{Val: v}
+	if l.length == 0 {
+		l.head = n
+		l.length++
+	} else {
+		n.next = l.First()
+		l.head.prev = n
+		l.head = n
+		l.length++
+	}
+}
+
+// PopFront removes value at front
+func (l *List) PopFront() (interface{}, error) {
+	if l.length == 0 {
+		return nil, ErrEmptyList
+	}
+	if l.length == 1 {
+		v := l.head.Val
+		l = NewList() // re-initialize to an empty list
+		return v, nil
+	}
+	v := l.head.Val
+	l.First().next.prev = nil
+	l.head = l.head.next
+	l.length--
+	return v, nil
+}
+
+// Reverse the list
+func (l *List) Reverse() {
+
+}
+
+// PrintList prints the elements in the list
+func (l *List) PrintList() {
+	p := l.head
+	for p != nil {
+		fmt.Printf("%v ", p.Val)
+		p = p.next
+	}
+	fmt.Println()
+}
