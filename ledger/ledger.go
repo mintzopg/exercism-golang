@@ -14,34 +14,24 @@ type Entry struct {
 
 func FormatLedger(currency string, locale string, entries []Entry) (string, error) {
 	var entriesCopy []Entry
-	for _, e := range entries {
-		entriesCopy = append(entriesCopy, e)
-	}
-	if len(entries) == 0 {
-		if _, err := FormatLedger(currency, "en-US", []Entry{{Date: "2014-01-01", Description: "", Change: 0}}); err != nil {
-			return "", err
-		}
+	entriesCopy = append(entriesCopy, entries...)
+	if !(currency == "USD" || currency == "EUR") {
+		return "", errors.New("invalid currency")
 	}
 	m1 := map[bool]int{true: 0, false: 1}
 	m2 := map[bool]int{true: -1, false: 1}
 	es := entriesCopy
 	for len(es) > 1 {
 		first, rest := es[0], es[1:]
-		success := false
-		for !success {
-			success = true
-			for i, e := range rest {
-				if (m1[e.Date == first.Date]*m2[e.Date < first.Date]*4 +
-					m1[e.Description == first.Description]*m2[e.Description < first.Description]*2 +
-					m1[e.Change == first.Change]*m2[e.Change < first.Change]*1) < 0 {
-					es[0], es[i+1] = es[i+1], es[0]
-					success = false
-				}
+		for i, e := range rest {
+			if (m1[e.Date == first.Date]*m2[e.Date < first.Date]*4 +
+				m1[e.Description == first.Description]*m2[e.Description < first.Description]*2 +
+				m1[e.Change == first.Change]*m2[e.Change < first.Change]*1) < 0 {
+				es[0], es[i+1] = es[i+1], es[0]
 			}
 		}
 		es = es[1:]
 	}
-
 	var s string
 	if locale == "nl-NL" {
 		s = "Datum" +
@@ -58,7 +48,7 @@ func FormatLedger(currency string, locale string, entries []Entry) (string, erro
 			strings.Repeat(" ", 25-len("Description")) +
 			" | " + "Change" + "\n"
 	} else {
-		return "", errors.New("")
+		return "", errors.New("invalid locale; should be either nl-NL or en-US")
 	}
 	// Parallelism, always a great idea
 	co := make(chan struct {
@@ -68,22 +58,8 @@ func FormatLedger(currency string, locale string, entries []Entry) (string, erro
 	})
 	for i, et := range entriesCopy {
 		go func(i int, entry Entry) {
-			if len(entry.Date) != 10 {
-				co <- struct {
-					i int
-					s string
-					e error
-				}{e: errors.New("")}
-			}
 			d1, d2, d3, d4, d5 := entry.Date[0:4], entry.Date[4], entry.Date[5:7], entry.Date[7], entry.Date[8:10]
-			if d2 != '-' {
-				co <- struct {
-					i int
-					s string
-					e error
-				}{e: errors.New("")}
-			}
-			if d4 != '-' {
+			if len(entry.Date) != 10 || d2 != '-' || d4 != '-' {
 				co <- struct {
 					i int
 					s string

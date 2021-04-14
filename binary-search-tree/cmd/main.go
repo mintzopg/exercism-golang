@@ -2,12 +2,11 @@ package main
 
 import (
 	"binarysearchtree"
-	"strconv"
 )
 
 func main() {
-	bst := binarysearchtree.Bst(4)
-	bst.MapString(strconv.Itoa)
+	bst := binarysearchtree.SearchTreeData{}
+	bst.Insert(3)
 
-	binarysearchtree.PrintTree(bst)
+	binarysearchtree.PrintTree(&bst)
 }

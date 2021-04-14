@@ -25,7 +25,10 @@ var gifts = []string{
 	"twelve Drummers Drumming",
 }
 
+<<<<<<< HEAD
 // Song generates the entire song
+=======
+>>>>>>> master
 func Song() string {
 	var sb strings.Builder
 	for i := 1; i <= 11; i++ {
@@ -35,7 +38,10 @@ func Song() string {
 	return sb.String()
 }
 
+<<<<<<< HEAD
 // Verse takes a day number and produces the corresponding verse
+=======
+>>>>>>> master
 func Verse(i int) string {
 	var verse string
 	if i < 1 || i > len(days) {

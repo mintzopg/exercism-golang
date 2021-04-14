@@ -17,7 +17,10 @@ func Bst(v int) *SearchTreeData {
 
 // func (*SearchTreeData) Insert(int)
 func (t *SearchTreeData) Insert(v int) {
+<<<<<<< HEAD
 	// t = insert(t, v)
+=======
+>>>>>>> master
 	if v <= t.data {
 		if t.left == nil {
 			t.left = Bst(v)
